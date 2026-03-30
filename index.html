@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SV OVERVECHT DE DREEF | Clubsite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dreef-blauw: #0d061a;
+            --dreef-rood: #cc0000;
+            --achtergrond: #f0f2f5;
+            --sidebar-breedte: 280px;
+            --wit: #ffffff;
+            --trans-wit: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        * { font-family: 'Poppins', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { background: var(--achtergrond); display: flex; min-height: 100vh; color: var(--dreef-blauw); overflow-x: hidden; }
+
+        /* MOBIELE HEADER */
+        .mobile-header {
+            display: none; position: fixed; top: 0; left: 0; right: 0; height: 60px;
+            background: var(--dreef-rood); color: white; align-items: center;
+            justify-content: space-between; padding: 0 20px; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .menu-toggle { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; font-weight: 800; }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: var(--sidebar-breedte); background: linear-gradient(180deg, var(--dreef-rood) 0%, #a00000 100%);
+            color: white; position: fixed; top: 0; left: 0; bottom: 0; border-right: 6px solid var(--dreef-blauw);
+            display: flex; flex-direction: column; z-index: 1100; overflow-y: auto; transition: transform 0.3s ease;
+        }
+
+        .sidebar-header { padding: 30px 20px; text-align: center; background: rgba(0,0,0,0.15); flex-shrink: 0; }
+        .sidebar-logo { width: 100px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); }
+        .sidebar-title { font-size: 1.5rem; text-transform: uppercase; font-weight: 800; color: var(--wit); margin-top: 15px; line-height: 1.1; }
+
+        /* DE NIEUWE SUBTIELE SPORT HOME KNOP */
+        .home-btn {
+            display: flex; justify-content: center; align-items: center; width: 90%; margin: 15px auto; height: 50px;
+            background: transparent; color: var(--wit); border: 2px solid var(--wit); border-radius: 12px;
+            cursor: pointer; font-size: 1.5rem; font-weight: 800; text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .home-btn:hover {
+            background: var(--wit);
+            color: var(--dreef-blauw);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .category-btn {
+            width: 100%; background: transparent; color: white; padding: 15px 25px; border: none; text-align: left;
+            font-weight: 600; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; 
+            align-items: center; border-bottom: 1px solid var(--trans-wit); font-size: 1.05rem;
+        }
+
+        .team-group { display: none; background: rgba(0,0,0,0.25); padding: 12px; flex-wrap: wrap; gap: 8px; }
+        .sidebar-item:hover .team-group { display: flex; }
+
+        .team-button {
+            flex: 1 1 calc(50% - 8px); background: rgba(255,255,255,0.08); color: white; border: 1px solid var(--trans-wit);
+            padding: 10px 5px; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; border-radius: 8px; cursor: pointer;
+        }
+
+        /* MAIN CONTENT */
+        .main-content { margin-left: var(--sidebar-breedte); flex: 1; padding: 60px; transition: filter 0.3s; }
+        .container { width: 100%; max-width: 1000px; margin: 0 auto; }
+        
+        h1#active-team-name { 
+            color: var(--dreef-blauw); text-transform: uppercase; border-left: 12px solid var(--dreef-rood); 
+            padding-left: 30px; margin-bottom: 45px; font-size: 4.5rem; line-height: 0.9; font-weight: 900;
+        }
+        
+        .home-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        .card { background: white; border-radius: 28px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 30px; }
+        
+        .card-header { background: var(--dreef-blauw); color: white; padding: 20px 30px; font-weight: 800; text-transform: uppercase; border-bottom: 5px solid var(--dreef-rood); margin: 0; }
+        .card-body { padding: 30px; line-height: 1.6; font-size: 1.1rem; color: #333; }
+        .card-body p { margin-top: 0; margin-bottom: 15px; }
+
+        .activity-item { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .date-badge { background: var(--dreef-rood); color: white; padding: 10px; border-radius: 12px; min-width: 60px; text-align: center; font-weight: 800; }
+
+        .newsletter-box { background: var(--dreef-blauw); color: white; padding: 30px; border-radius: 24px; text-align: center; }
+        .newsletter-box h2 { font-weight: 800; margin-bottom: 10px; }
+        .newsletter-box p { margin-top: 0; margin-bottom: 15px; }
+        .newsletter-box input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: none; }
+        .newsletter-btn { background: var(--dreef-rood); color: white; padding: 12px; border-radius: 8px; font-weight: 800; text-transform: uppercase; cursor: pointer; width: 100%; border: none; }
+
+        @media (max-width: 1024px) {
+            .mobile-header { display: flex; }
+            .sidebar { transform: translateX(-100%); width: 85%; max-width: 320px; }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 80px 20px 20px 20px; }
+            .home-grid { grid-template-columns: 1fr; }
+            h1#active-team-name { font-size: 2.5rem; padding-left: 15px; border-left-width: 8px; }
+            .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1050; }
+            .sidebar-overlay.show { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-header">
+        <button class="menu-toggle" onclick="toggleMenu()">☰ MENU</button>
+        <span style="font-weight: 800; font-size: 0.9rem;">SV OVERVECHT DE DREEF</span>
+    </div>
+
+    <div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="Logo" class="sidebar-logo">
+            <div class="sidebar-title">SV OVERVECHT<br>DE DREEF</div>
+        </div>
+
+        <button class="home-btn" onclick="gaNaarHome(); toggleMenu()">HOME</button>
+
+        <div class="sidebar-item">
+            <button class="category-btn">Mannen Zaterdag <span>+</span></button>
+            <div class="team-group"><button class="team-button" onclick="laadTeam(this); toggleMenu()">Mannen 1</button></div>
+        </div>
+
+        <div class="sidebar-item">
+            <button class="category-btn">Onder 16 & 15 <span>+</span></button>
+            <div class="team-group">
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO16-1</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO15-1</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO15-2JM</button>
+            </div>
+        </div>
+
+        <div class="sidebar-item">
+            <button class="category-btn">Onder 14 <span>+</span></button>
+            <div class="team-group">
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO14-1</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO14-2</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO14-3</button>
+            </div>
+        </div>
+
+        <div class="sidebar-item">
+            <button class="category-btn">Onder 13 & 12 <span>+</span></button>
+            <div class="team-group">
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO13-1</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO13-2</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO12-1</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO12-2</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO12-3</button>
+            </div>
+        </div>
+
+        <div class="sidebar-item">
+            <button class="category-btn">Onder 11 <span>+</span></button>
+            <div class="team-group">
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO11-1</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO11-2</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO11-3</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO11-4</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO11-5</button>
+            </div>
+        </div>
+
+        <div class="sidebar-item">
+            <button class="category-btn">Onder 10 t/m 7 <span>+</span></button>
+            <div class="team-group">
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO10-1</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO10-2</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO9-1</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO9-2</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO9-3</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO8-1</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO8-2</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO8-3</button>
+                <button class="team-button" onclick="laadTeam(this); toggleMenu()">JO7-1</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container" id="main-container"></div>
+    </main>
+
+    <script>
+        function toggleMenu() {
+            if(window.innerWidth <= 1024) {
+                document.getElementById('sidebar').classList.toggle('open');
+                document.getElementById('overlay').classList.toggle('show');
+            }
+        }
+
+        const homeContent = `
+            <h1 id="active-team-name">SV OVERVECHT</h1>
+            <div class="home-grid">
+                <div class="left-col">
+                    <div class="card">
+                        <div class="card-header">Over Onze Club</div>
+                        <div class="card-body">
+                            <p>SV Overvecht De Dreef is een levendige voetbalvereniging in Utrecht. Wij bieden een plek aan jong en oud voor sportiviteit en plezier.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">Club Activiteiten 2026</div>
+                        <div class="card-body">
+                            <div class="activity-item"><div class="date-badge">12<br>APR</div><div><strong>Paas-Toernooi Jeugd</strong></div></div>
+                            <div class="activity-item" style="border:0; margin:0; padding:0;"><div class="date-badge">20<br>JUN</div><div><strong>Eind-BBQ Seizoen</strong></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-col">
+                    <div class="newsletter-box">
+                        <h2>NIEUWSBRIEF</h2>
+                        <p>Blijf op de hoogte van al het clubnieuws.</p>
+                        <input type="email" placeholder="Je e-mailadres">
+                        <button class="newsletter-btn">Aanmelden</button>
+                    </div>
+                    <div class="card" style="margin-top:30px;">
+                        <div class="card-header" style="background:var(--dreef-rood);">HELP DE CLUB</div>
+                        <div class="card-body" style="text-align:center;">
+                            <p style="margin-bottom:20px; font-weight:600;">Wij zoeken nog scheidsrechters en trainers!</p>
+                            <button style="background:var(--dreef-blauw); color:white; border:none; padding:12px; border-radius:8px; width:100%; font-weight:800; cursor:pointer;">MELD JE AAN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        function gaNaarHome() {
+            document.querySelectorAll('.team-button').forEach(b => b.classList.remove('active'));
+            document.getElementById('main-container').innerHTML = homeContent;
+        }
+
+        function laadTeam(buttonElement) {
+            const teamNaam = buttonElement.innerText;
+            document.querySelectorAll('.team-button').forEach(b => b.classList.remove('active'));
+            buttonElement.classList.add('active');
+            document.getElementById('main-container').innerHTML = `
+                <h1 id="active-team-name">${teamNaam}</h1>
+                <div class="card">
+                    <div class="card-header">Team Informatie</div>
+                    <div class="card-body">
+                        <p>Informatie voor ${teamNaam} wordt hier geladen.</p>
+                    </div>
+                </div>`;
+        }
+        window.onload = gaNaarHome;
+    </script>
+</body>
+</html>
